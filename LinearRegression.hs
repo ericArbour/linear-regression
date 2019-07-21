@@ -1,12 +1,11 @@
-type Point = (Float,Float)
+import GetData
 
-points :: [Point]
-points = [(0.5,1.4),(2.3,1.9),(2.9,3.2)]
+type Point = (Double,Double)
 
 linearEq :: Num a => a -> a -> (a -> a)
 linearEq m b x = m * x + b
 
-sumOfSquares :: [Point] -> Float -> Float -> Float
+sumOfSquares :: [Point] -> Double -> Double -> Double
 sumOfSquares pts m b = sum squares
   where squares = map squareResidual pts
         squareResidual (x,y) = (y - model x) ** 2
@@ -17,7 +16,7 @@ gradient f x y = ( ( (f (x + h) y) - ( f x y ) ) / h
              , ( (f x (y + h) ) - ( f x y ) ) / h )
   where h = 0.00001
 
-gradientDescent :: (Float -> Float -> Float) -> Float -> Float -> Int -> (Float, Float)
+gradientDescent :: (Double -> Double -> Double) -> Double -> Double -> Int -> (Double, Double)
 gradientDescent costFn x y step =
   let (xSlope, ySlope) = gradient costFn x y
       xStepSize = xSlope * learningRate
@@ -31,5 +30,6 @@ gradientDescent costFn x y step =
 
 main :: IO ()
 main = do
+  points <- getData "test-data.csv"
   print $ gradientDescent (sumOfSquares points) 1 0 0
   return ()
